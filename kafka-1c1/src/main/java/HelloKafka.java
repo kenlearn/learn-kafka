@@ -7,13 +7,17 @@
 import java.util.Date;
 import java.util.Properties;
 
-import kafka.javaapi.producer.Producer;
-import kafka.producer.KeyedMessage;
-import kafka.producer.ProducerConfig;
+import org.apache.kafka.clients.producer.*;
+import org.apache.kafka.common.serialization.StringSerializer;
+import org.apache.kafka.common.serialization.LongSerializer;
+
 
 public class HelloKafka {
 
-    private static Producer<String, String> producer;
+    private static Producer<Long, String> producer;
+    private static String TOPIC = "test1";
+    private static String BOOTSTRAP_SERVERS = "k8c1:9092,k8c1:9093,k8c1:9094";
+
 
     public HelloKafka() {
         Properties props = new Properties();
@@ -23,6 +27,12 @@ public class HelloKafka {
 
         ProducerConfig config = new ProducerConfig(props);
         producer = new Producer<String, String>(config);
+    }
+
+    private static Producer<Long, String> createProducer() {
+        Properties props = new Properties();
+
+        props.put(ProducerConfig.BOOTSTRAP_SERVERS
     }
 
     public static void main(String[] args) {
