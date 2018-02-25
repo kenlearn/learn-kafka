@@ -7,22 +7,24 @@
 import java.util.Date;
 import java.util.Properties;
 
-import kafka.javaapi.producer.Producer;
-import kafka.producer.KeyedMessage;
-import kafka.producer.ProducerConfig;
+import org.apache.kafka.clients.producer.*;
+import org.apache.kafka.common.serialization.StringSerializer;
+
 
 public class HelloKafka {
 
-    private static Producer<String, String> producer;
+    private static KafkaProducer<String, String> producer;
 
     public HelloKafka() {
         Properties props = new Properties();
-        props.put("metadata.broker.list", "master:9092, worker1:9092, worker2:9092");
-        props.put("serializer.class", "kafka.serializer.StringEncoder");
-        props.put("request.required.acks", "1");
+        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "master:9092, worker1:9092, worker2:9092");
+        props.put(ProducerConfig.CLIENT_ID_CONFIG, "HelloKafka");
+        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,
+                StringSerializer.class.getName());
+        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,
+                StringSerializer.class.getName());
 
-        ProducerConfig config = new ProducerConfig(props);
-        producer = new Producer<String, String>(config);
+        producer = new KafkaProducer<String, String>(props);
     }
 
     public static void main(String[] args) {
@@ -38,7 +40,6 @@ public class HelloKafka {
 
         System.out.println("Topic Name: " + topic);
         System.out.println("Message Count:" + count);
-
     }
 
     
